@@ -20,8 +20,7 @@ class EncodeText(BaseModel):
 @app.get("/")
 async def root():
     global model
-    hello_world = model.encode("Hello World")
-    return {"message": hello_world}
+    return {"message": model.encode("Welcome at SentencePieceMicroS")}
 
 # Encoding with arg
 @app.post("/encode")
