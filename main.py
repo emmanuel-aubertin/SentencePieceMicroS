@@ -47,13 +47,26 @@ if __name__ == "__main__":
     # Loading the model
     print("##### Loading model #####")
     model = tokenizer.SentencePieceProcessor(model_file='models/tokenizer.model')
-    print("✅ \033[1;32mModel loaded\033[0m ✅")
+    print("🤭 \033[1;32mModel loaded\033[0m 🤭")
 
+    # Checking for SSL mode
+    print("##### Checking for SSL mode #####")
+    if os.path.exists("./cert/key.pem") and os.path.exists("./cert/cert.pem"):
+        print("✅ \033[1;32mSSL mode enabled\033[0m ✅")
+        ssl = True
+    else:
+        print("❌ \033[1;31mSSL mode disabled\033[0m ❌")
+        ssl = False
 
     # Strating the FastAPI
     print("##### Strating FastAPI #####")
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    if ssl:
+        uvicorn.run(app, host="0.0.0.0", port=8000,
+                    ssl_keyfile="./cert/key.pem", 
+                    ssl_certfile="./cert/cert.pem")
+    else:
+        uvicorn.run(app, host="0.0.0.0", port=8000)
 
 
 
