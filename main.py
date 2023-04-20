@@ -9,7 +9,6 @@ model = None
 app = FastAPI()
 
 
-
 class Text(BaseModel):
     message: str
 
@@ -54,7 +53,7 @@ if __name__ == "__main__":
         print("✅ \033[1;32mSSL mode enabled\033[0m ✅")
         ssl = True
     else:
-        print("❌ \033[1;31mSSL mode disabled\033[0m ❌")
+        print("❌ \033[1;31mSSL mode disabled\033[0m ❌\n👁️ \033[1;31mYou must use SSL you in production.\033[0m 👁️ \nMore info here: https://github.com/emmanuel-aubertin/SentencePieceMicroS")
         ssl = False
 
     # Strating the FastAPI
