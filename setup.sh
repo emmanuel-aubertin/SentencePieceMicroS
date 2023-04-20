@@ -49,5 +49,5 @@ done
 
 echo "#### CHECKING FOR DEP"
 echo "## API DEP"
-python3 -m pip install fastapi sentencepiece pydantic
+python3 -m pip install fastapi sentencepiece pydantic google-auth requests PyJWT
 
