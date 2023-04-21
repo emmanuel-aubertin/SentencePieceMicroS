@@ -2,3 +2,4 @@ __pycache__
 models/*.model
 cert/*.pem
 .DS_Store
+.env
