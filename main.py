@@ -1,40 +1,30 @@
-from fastapi import FastAPI
-import sentencepiece as tokenizer
 import glob
 import os
-from pydantic import BaseModel
 from typing import List
+import argparse
+import sentencepiece as tokenizer
 
+__author__ = "Aubertin Emmanuel"
+__copyright__ = "2021, CERI"
+__credits__ = ["Aubertin Emmanuel"]
+__license__ = "GPL"
+__version__ = "1.0.0"
+
+parser = argparse.ArgumentParser(description="""
+        Check and return CPU usage per connected user.
+        """,
+        usage="""
+            main.py -auth 'auth0'
+        """,
+        epilog="version {}, license {}, copyright {}, credits {}".format(__version__,__license__,__copyright__,__credits__))
+parser.add_argument('-auth', '--auth', type=str, nargs='?', help='enable auth for api', default=False)
+
+args = parser.parse_args()
 model = None
-app = FastAPI()
-
-
-class Text(BaseModel):
-    message: str
-
-class EncodeText(BaseModel):
-    message: List[int]
-
-# Encoding Hello World
-@app.get("/")
-async def root():
-    global model
-    return {"message": model.encode("Welcome at SentencePieceMicroS")}
-
-# Encoding with arg
-@app.post("/encode")
-async def encode_api(text: Text):
-    global model
-    return {"message": model.encode(text.message)}
-
-# Encoding with arg
-@app.post("/decode")
-async def decode_api(encode_text: EncodeText):
-    global model
-    return {"message": model.decode(encode_text.message)}
 
 if __name__ == "__main__":
     # Check if there is file with .model or .srl extension  in ./models/
+
     print("##### Checking for model #####")
     if not os.path.exists("./models/tokenizer.model"):
         print("There is no model in folder./models/\nPlease you have to train the model or download a model")
@@ -58,7 +48,13 @@ if __name__ == "__main__":
 
     # Strating the FastAPI
     print("##### Strating FastAPI #####")
+
     import uvicorn
+    if args.auth:
+        from api.api_auth import app, set_model
+        set_model(model)
+    else:
+        from api.api import app
     if ssl:
         uvicorn.run(app, host="0.0.0.0", port=8000,
                     ssl_keyfile="./cert/key.pem", 
